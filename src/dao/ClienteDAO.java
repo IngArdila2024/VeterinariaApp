@@ -21,6 +21,16 @@ public class ClienteDAO {
      * @param cliente Objeto Cliente a insertar.
      */
     public void agregarCliente(Cliente cliente) {
+        //Validacion para no permitir clientes con informacion nula
+        if (isNullOrEmpty(cliente.getNombre()) ||
+        isNullOrEmpty(cliente.getEmail()) ||
+        isNullOrEmpty(cliente.getTelefono()) ||
+        isNullOrEmpty(cliente.getDireccion())) {
+
+        System.err.println("Error, todos los parametros del cliente son obligatorios (nombre, email, teléfono, dirección).");
+        return;
+        }
+
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_INSERTAR_CLIENTE, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -41,6 +51,12 @@ public class ClienteDAO {
             System.err.println("Error al agregar cliente: " + e.getMessage());
         }
     }
+    //Esta funcion nos permitira validar si uno de los datos viene null o vacio
+    private boolean isNullOrEmpty(String str) {
+        return str == null || str.trim().isEmpty();
+    }
+
+
 
     /**
      * Obtiene todos los clientes almacenados en la base de datos.
