@@ -102,7 +102,7 @@ public class ClienteDAO {
 
             int filasAfectadas = stmt.executeUpdate();
             if (filasAfectadas > 0) {
-                System.out.println("Cliente actualizado correctamente.");
+                System.out.println("Cliente" + cliente.getNombre() + "actualizado correctamente.");
             } else {
                 System.out.println("No se encontró el cliente para actualizar.");
             }
@@ -123,7 +123,7 @@ public class ClienteDAO {
 
             int filasAfectadas = stmt.executeUpdate();
             if (filasAfectadas > 0) {
-                System.out.println("Cliente eliminado correctamente.");
+                System.out.println("Cliente "  + cliente.getNombre() + "eliminado correctamente.");
             } else {
                 System.out.println("No se encontró el cliente para eliminar.");
             }
