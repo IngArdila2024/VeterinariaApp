@@ -9,11 +9,15 @@ import java.util.List;
 
 public class ClienteDAO {
 
-    public void agregarCliente(Cliente cliente) {
-        String sql = "INSERT INTO clientes (nombre, email, telefono, direccion) VALUES (?, ?, ?, ?)";
+    // Constantes con las sentencias SQL
+    private static final String SQL_INSERTAR_CLIENTE = "INSERT INTO clientes (nombre, email, telefono, direccion) VALUES (?, ?, ?, ?)";
+    private static final String SQL_SELECCIONAR_CLIENTES = "SELECT * FROM clientes";
+    private static final String SQL_ACTUALIZAR_CLIENTE = "UPDATE clientes SET nombre = ?, email = ?, telefono = ?, direccion = ? WHERE id = ?";
+    private static final String SQL_ELIMINAR_CLIENTE = "DELETE FROM clientes WHERE id = ?";
 
+    public void agregarCliente(Cliente cliente) {
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement stmt = conn.prepareStatement(SQL_INSERTAR_CLIENTE, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, cliente.getNombre());
             stmt.setString(2, cliente.getEmail());
@@ -35,10 +39,9 @@ public class ClienteDAO {
 
     public List<Cliente> obtenerClientes() {
         List<Cliente> clientes = new ArrayList<>();
-        String sql = "SELECT * FROM clientes";
 
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
+             PreparedStatement stmt = conn.prepareStatement(SQL_SELECCIONAR_CLIENTES);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
@@ -59,10 +62,8 @@ public class ClienteDAO {
     }
 
     public void actualizarCliente(Cliente cliente) {
-        String sql = "UPDATE clientes SET nombre = ?, email = ?, telefono = ?, direccion = ? WHERE id = ?";
-
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(SQL_ACTUALIZAR_CLIENTE)) {
 
             stmt.setString(1, cliente.getNombre());
             stmt.setString(2, cliente.getEmail());
@@ -82,10 +83,8 @@ public class ClienteDAO {
     }
 
     public void eliminarCliente(int clienteId) {
-        String sql = "DELETE FROM clientes WHERE id = ?";
-
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(SQL_ELIMINAR_CLIENTE)) {
 
             stmt.setInt(1, clienteId);
 
