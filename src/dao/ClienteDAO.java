@@ -15,6 +15,11 @@ public class ClienteDAO {
     private static final String SQL_ACTUALIZAR_CLIENTE = "UPDATE clientes SET nombre = ?, email = ?, telefono = ?, direccion = ? WHERE id = ?";
     private static final String SQL_ELIMINAR_CLIENTE = "DELETE FROM clientes WHERE id = ?";
 
+    /**
+     * Inserta un nuevo cliente en la base de datos.
+     * También asigna el ID generado automáticamente al objeto cliente.
+     * @param cliente Objeto Cliente a insertar.
+     */
     public void agregarCliente(Cliente cliente) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_INSERTAR_CLIENTE, Statement.RETURN_GENERATED_KEYS)) {
@@ -28,7 +33,7 @@ public class ClienteDAO {
             if (filasAfectadas > 0) {
                 try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
-                        cliente.setId(generatedKeys.getInt(1));
+                        cliente.setId(generatedKeys.getInt(1)); // Asigna el ID generado al cliente
                     }
                 }
             }
@@ -37,6 +42,10 @@ public class ClienteDAO {
         }
     }
 
+    /**
+     * Obtiene todos los clientes almacenados en la base de datos.
+     * @return Lista de objetos Cliente.
+     */
     public List<Cliente> obtenerClientes() {
         List<Cliente> clientes = new ArrayList<>();
 
@@ -61,6 +70,10 @@ public class ClienteDAO {
         return clientes;
     }
 
+    /**
+     * Actualiza los datos de un cliente existente en la base de datos.
+     * @param cliente Cliente con la información nueva (debe tener un ID válido).
+     */
     public void actualizarCliente(Cliente cliente) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_ACTUALIZAR_CLIENTE)) {
@@ -82,6 +95,10 @@ public class ClienteDAO {
         }
     }
 
+    /**
+     * Elimina un cliente de la base de datos según su ID.
+     * @param clienteId ID del cliente a eliminar.
+     */
     public void eliminarCliente(int clienteId) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_ELIMINAR_CLIENTE)) {
